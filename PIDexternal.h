@@ -7,10 +7,10 @@ class PIDexternal
 {
   public:
     PIDexternal(float Pv, float Iv, float Dv, float TargetValue, float StartingValue);
-    void setOffset(float Offset);
-    void setP(float P);
-    void setI(float I);
-    void setD(float D);
+    void setOffset(float Offsetv);
+    void setP(float Pv);
+    void setI(float Iv);
+    void setD(float Dv);
     void setTarget(float TargetValue);
     void step(float CurrentPosition, float Time);
     float getCorrection();
@@ -24,6 +24,7 @@ class PIDexternal
     float LastVal;
     float Dif;
     float Offset;
+    float Isum;
     boolean includeI;
 };
 
