@@ -14,7 +14,7 @@ class PIDexternal
     void setTarget(float TargetValue);
     void step(float CurrentPosition, float Time);
     float getCorrection();
-    float StepGetC(float CurrentPosition);
+    float StepGetC(float CurrentPosition, float Time);
   private:
     float P;
     float I;
