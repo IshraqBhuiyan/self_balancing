@@ -6,7 +6,7 @@
 class PIDexternal
 {
   public:
-    PIDexternal(float P, float I, float D, float TargetValue, float StartingValue);
+    PIDexternal(float Pv, float Iv, float Dv, float TargetValue, float StartingValue);
     void setOffset(float Offset);
     void setP(float P);
     void setI(float I);
