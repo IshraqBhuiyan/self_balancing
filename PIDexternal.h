@@ -25,6 +25,7 @@ class PIDexternal
     float Dif;
     float Offset;
     float Isum;
+    float Output;
     boolean includeI;
 };
 
