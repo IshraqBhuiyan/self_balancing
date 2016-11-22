@@ -2,11 +2,14 @@
 #include <Wire.h>
 #include "Kalman.h"
 #include "main.h"
-//#include "i2c.ino"
+#include <Servo.h>
+
 
 //const int MPU_addr=0x68;  // I2C address of the MPU-6050
 //int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
 Kalman kalman;
+cfg_t cfg;
+int i =0;
 
 void setup(){
   setValues();
@@ -17,19 +20,34 @@ void setup(){
   setup_encoder();
   motor_setup();
   stopAndReset();
+  testTimer = millis();
   //cfg.backToSpot = 0;
   //Serial.println("Hi1");
 
 }
 
 void loop(){
-  //Serial.println("Hi");
   MPU_update();
-  Serial.println("Kalman Pitch: " + (String)pitch);
-  //drive_motor(1500, 1500);
+  //Serial.println("Kalman Pitch: " + (String)pitch);
   uint32_t timer = micros();
+  //drive_motor(2200, 2200);
+  if(millis()-testTimer>=500){
+    Serial.println("Kalman Value" + (String)pitch);
+    testTimer = millis();
+  }
   updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
   updateEncoder();
+  //Serial.println("Motor Speeds" + (String)(1500+i));
+  /*
+  uint32_t currTime = millis();
+  if(currTime-testTimer >= 1000){
+    Serial.println("Left Velocity: " + (String)leftVelocity);
+    Serial.println("Right Velocity: " + (String)rightVelocity);
+    testTimer = currTime;
+  }
+  //Serial.println("Left Counter " + (String)leftCounter);
+  i+=10;
+  */
   /*
   Serial.println("Hi");
   Wire.beginTransmission(MPU_addr);
@@ -60,9 +78,9 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 9.0f;
-  cfg.I = 2.0f;
-  cfg.D = 3.0f;
+  cfg.P = 10.0f;
+  cfg.I = 0.0f;
+  cfg.D = 1.0f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 1.0f;
   cfg.targetAngle = 180.0f;

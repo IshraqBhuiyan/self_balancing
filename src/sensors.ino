@@ -36,11 +36,11 @@ void MPU_update(){
   int16_t accY = ((i2cbuffer[0]<<8) | i2cbuffer[1]);
   int16_t accZ = ((i2cbuffer[2]<<8) | i2cbuffer[3]);
   int16_t gyroX = ((i2cbuffer[6]<<8) | i2cbuffer[7]);
-  Serial.println("accY = " + (String)accY);
-  Serial.println("accZ = " + (String)accZ);
-  Serial.println("GyroX = " + (String)gyroX);
+  //Serial.println("accY = " + (String)accY);
+  //Serial.println("accZ = " + (String)accZ);
+  //Serial.println("GyroX = " + (String)gyroX);
   accAngle = (atan2((float)accY-0,(float)accZ-0)+PI)*RAD_TO_DEG;
-  Serial.println("accAngle = " + (String)accAngle);
+  //Serial.println("accAngle = " + (String)accAngle);
 
   uint32_t timer = micros();
 
@@ -77,6 +77,10 @@ void updateEncoder(){
     encoderTimer = timer;
     int32_t wheelPosition = getWheelsPosition();
     wheelVelocity = wheelPosition - lastWheelPosition;
+    leftVelocity = leftCounter - lastLeftPosition;
+    rightVelocity = rightCounter - lastRightPosition;
+    lastLeftPosition = leftCounter;
+    lastRightPosition = rightCounter;
     lastWheelPosition = wheelPosition;
   }
 }
@@ -97,14 +101,14 @@ void leftEncoder(){
 }
 
 void rightEncoder(){
-  if (digitalRead(leftEncoder1) == HIGH) {
-    if (digitalRead(leftEncoder2) == LOW) {
+  if (digitalRead(rightEncoder1) == HIGH) {
+    if (digitalRead(rightEncoder2) == LOW) {
       rightCounter++;
     } else {
       rightCounter--;
     }
   } else {
-    if (digitalRead(leftEncoder2) == LOW) {
+    if (digitalRead(rightEncoder2) == LOW) {
       rightCounter--;
     } else {
       rightCounter++;

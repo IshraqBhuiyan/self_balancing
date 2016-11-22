@@ -3,17 +3,23 @@
 Servo left;
 Servo right;
 
+extern cfg_t cfg;
 
 void motor_setup(){
   left.attach(leftMotorPin);
   right.attach(rightMotorPin);
+  Serial.println("Attached");
   left.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
   right.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
+  delay(1500);
+  Serial.println("Armed");
 }
 
-void drive_motor(uint8_t leftMotor, uint8_t rightMotor){
+void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
   left.writeMicroseconds(leftMotor);
   right.writeMicroseconds(rightMotor);
+  delay(500);
+  //Serial.println("Wrote left" + (String)leftMotor + " Wrote right " + (String)rightMotor);
 }
 
 void updatePID(float restAngle, float offset, float turning, float dt){

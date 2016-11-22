@@ -3,9 +3,10 @@
 #define ROBOT
 
 #include <stdint.h>
+#include <Servo.h>
 
 static uint8_t i2cbuffer[8];
-static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer;
+static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer;
 static float accAngle, pitch, gyroAngle;
 
 #define rightEncoder1 2
@@ -19,6 +20,10 @@ static volatile int32_t rightCounter = 0;
 static int32_t lastWheelPosition;
 static int32_t wheelVelocity;
 static int32_t targetPosition;
+static int32_t lastLeftPosition;
+static int32_t lastRightPosition;
+static int32_t leftVelocity;
+static int32_t rightVelocity;
 
 static bool steerStop = true;
 
