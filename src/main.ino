@@ -82,7 +82,7 @@ void setValues(){
   cfg.I = 0.0f;
   cfg.D = 1.0f;
   cfg.leftMotorScaler = 1.0f;
-  cfg.rightMotorScaler = 1.0f;
+  cfg.rightMotorScaler = 0.97f;
   cfg.targetAngle = 180.0f;
   cfg.turningLimit = 2;
 
