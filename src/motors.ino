@@ -16,14 +16,28 @@ void motor_setup(){
 }
 
 void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
-  left.writeMicroseconds(leftMotor);
-  right.writeMicroseconds(rightMotor);
-  delay(500);
+  if(leftMotor<1500){
+    left.writeMicroseconds(leftMotor-90);
+  }else if(leftMotor>1500){
+    left.writeMicroseconds(leftMotor+100);
+  }else{
+    left.writeMicroseconds(leftMotor);
+  }
+  if(rightMotor<1500){
+    right.writeMicroseconds(rightMotor-100);
+  }else if (rightMotor>1500){
+    right.writeMicroseconds(rightMotor+70);
+  }else{
+    right.writeMicroseconds(rightMotor);
+  }
+  //left.writeMicroseconds(leftMotor);
+  //right.writeMicroseconds(rightMotor);
+  //delay(500);
   //Serial.println("Wrote left" + (String)leftMotor + " Wrote right " + (String)rightMotor);
 }
 
 void updatePID(float restAngle, float offset, float turning, float dt){
-  if(steerStop){
+  if(false/*steerStop*/){
     int32_t wheelPosition = getWheelsPosition();
     int32_t positionError = wheelPosition - targetPosition;
     if(abs(positionError)<2000){
@@ -45,10 +59,10 @@ void updatePID(float restAngle, float offset, float turning, float dt){
   float PIDLeft = PIDValue + turning;
   float PIDRight = PIDValue - turning;
 
-  PIDLeft *= cfg.leftMotorScaler;
-  PIDRight *= cfg.rightMotorScaler;
+  PIDLeft = map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth);
+  PIDRight = map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth);
 
-  drive_motor(constrain(PIDLeft, min_pulsewidth, max_pulsewidth), constrain(PIDRight, min_pulsewidth, max_pulsewidth));
+  drive_motor(PIDLeft, PIDRight);
 }
 
 void stopAndReset(){
