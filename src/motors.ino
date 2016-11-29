@@ -11,7 +11,7 @@ void motor_setup(){
   Serial.println("Attached");
   left.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
   right.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
-  delay(1500);
+  delay(2000);
   Serial.println("Armed");
 }
 
@@ -52,7 +52,7 @@ void updatePID(float restAngle, float offset, float turning, float dt){
 }
 
 void stopAndReset(){
-  drive_motor(1500, 1500);
+  drive_motor((min_pulsewidth + max_pulsewidth)/2, (min_pulsewidth + max_pulsewidth)/2);
   lastError = 0;
   iTerm = 0;
   targetPosition = getWheelsPosition();

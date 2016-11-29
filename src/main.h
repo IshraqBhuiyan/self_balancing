@@ -30,8 +30,8 @@ static bool steerStop = true;
 #define leftMotorPin 9
 #define rightMotorPin 10
 
-#define min_pulsewidth 1100
-#define max_pulsewidth 1900
+#define min_pulsewidth 1250
+#define max_pulsewidth 1750
 
 typedef struct {
   float P, I, D; // PID variables

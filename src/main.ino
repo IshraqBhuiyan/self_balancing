@@ -17,9 +17,9 @@ void setup(){
   //cfg.targetAngle = 180.0f;
   //Serial.println("Hi2");
   MPU_setup();
-  setup_encoder();
+  //setup_encoder();
   motor_setup();
-  stopAndReset();
+  //stopAndReset();
   testTimer = millis();
   //cfg.backToSpot = 0;
   //Serial.println("Hi1");
@@ -28,15 +28,16 @@ void setup(){
 
 void loop(){
   MPU_update();
-  //Serial.println("Kalman Pitch: " + (String)pitch);
+  Serial.println("Kalman Pitch: " + (String)pitch);
   uint32_t timer = micros();
   //drive_motor(2200, 2200);
   if(millis()-testTimer>=500){
-    Serial.println("Kalman Value" + (String)pitch);
+    //Serial.println("Kalman Value" + (String)pitch);
     testTimer = millis();
   }
+  //drive_motor(1650,1500);
   updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
-  updateEncoder();
+  //updateEncoder();
   //Serial.println("Motor Speeds" + (String)(1500+i));
   /*
   uint32_t currTime = millis();

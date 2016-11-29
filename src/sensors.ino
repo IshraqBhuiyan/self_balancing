@@ -1,7 +1,7 @@
 
 void MPU_setup(){
   Wire.begin();
-  Wire.setClock(400000UL);
+  Wire.setClock(25000UL);
   while(i2cWrite(0x6B, 0x80, true));
   do{
     while(i2cRead(0x6B, i2cbuffer, 1));
