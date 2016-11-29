@@ -11,25 +11,27 @@ void motor_setup(){
   Serial.println("Attached");
   left.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
   right.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
-  delay(2000);
+  delay(1500);
   Serial.println("Armed");
 }
 
 void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
+
   if(leftMotor<1500){
-    left.writeMicroseconds(leftMotor-90);
+    left.writeMicroseconds(leftMotor-75);
   }else if(leftMotor>1500){
-    left.writeMicroseconds(leftMotor+100);
+    left.writeMicroseconds(leftMotor+70);
   }else{
     left.writeMicroseconds(leftMotor);
   }
   if(rightMotor<1500){
-    right.writeMicroseconds(rightMotor-100);
+    right.writeMicroseconds(rightMotor-85);
   }else if (rightMotor>1500){
     right.writeMicroseconds(rightMotor+70);
   }else{
     right.writeMicroseconds(rightMotor);
   }
+
   //left.writeMicroseconds(leftMotor);
   //right.writeMicroseconds(rightMotor);
   //delay(500);
@@ -59,8 +61,8 @@ void updatePID(float restAngle, float offset, float turning, float dt){
   float PIDLeft = PIDValue + turning;
   float PIDRight = PIDValue - turning;
 
-  PIDLeft = map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth);
-  PIDRight = map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth);
+  PIDLeft = map(PIDLeft, -1000, 1000, min_pulsewidth, max_pulsewidth);
+  PIDRight = map(PIDRight, -1000, 1000, min_pulsewidth, max_pulsewidth);
 
   drive_motor(PIDLeft, PIDRight);
 }
