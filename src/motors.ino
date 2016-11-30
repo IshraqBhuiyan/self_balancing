@@ -37,8 +37,32 @@ void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
   //delay(500);
   //Serial.println("Wrote left" + (String)leftMotor + " Wrote right " + (String)rightMotor);
 }
-
 void updatePID(float restAngle, float offset, float turning, float dt){
+  float error = restAngle - pitch;
+  float pTerm = cfg.P * error;
+  integratedError += error*dt;
+  integratedError = constrain(integratedError, -100.0f, 100.0f);
+  float iTerm = cfg.I * integratedError;
+  float dTerm = cfg.D * (error-lastError) / dt;
+  lastError = error;
+  float PIDValue = pTerm + iTerm + dTerm;
+
+  float PIDLeft = PIDValue + turning;
+  float PIDRight = PIDValue - turning;
+  uint32_t n2Timer = millis();
+  if(n2Timer - nTimer >= 100){
+    Serial.println("Left PID: "+(String)PIDLeft);
+    Serial.println("RightPID: "+(String)PIDRight);
+    nTimer = n2Timer;
+  }
+
+  PIDLeft = constrain(map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
+  PIDRight = constrain(map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
+
+  drive_motor(PIDLeft, PIDRight);
+}
+//old Update PID, kept here for reference
+void updatePID2(float restAngle, float offset, float turning, float dt){
   if(false/*steerStop*/){
     int32_t wheelPosition = getWheelsPosition();
     int32_t positionError = wheelPosition - targetPosition;
@@ -52,17 +76,17 @@ void updatePID(float restAngle, float offset, float turning, float dt){
   }
   float error = restAngle - pitch;
   float pTerm = cfg.P * error;
-  iTerm += cfg.I * 100.0f * error * dt;
-  iTerm = constrain(iTerm, -100.0f, 100.0f);
+  i2Term += cfg.I * 100.0f * error * dt;
+  i2Term = constrain(i2Term, -100.0f, 100.0f);
   float dTerm = (cfg.D/100.0f) * (error-lastError) / dt;
   lastError = error;
-  float PIDValue = pTerm + iTerm + dTerm;
+  float PIDValue = pTerm + i2Term + dTerm;
 
   float PIDLeft = PIDValue + turning;
   float PIDRight = PIDValue - turning;
 
-  PIDLeft = map(PIDLeft, -1000, 1000, min_pulsewidth, max_pulsewidth);
-  PIDRight = map(PIDRight, -1000, 1000, min_pulsewidth, max_pulsewidth);
+  PIDLeft = constrain(map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
+  PIDRight = constrain(map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
 
   drive_motor(PIDLeft, PIDRight);
 }
@@ -70,7 +94,7 @@ void updatePID(float restAngle, float offset, float turning, float dt){
 void stopAndReset(){
   drive_motor((min_pulsewidth + max_pulsewidth)/2, (min_pulsewidth + max_pulsewidth)/2);
   lastError = 0;
-  iTerm = 0;
+  integratedError = 0;
   targetPosition = getWheelsPosition();
   lastRestAngle = cfg.targetAngle;
 }

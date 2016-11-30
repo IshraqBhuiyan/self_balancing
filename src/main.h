@@ -6,7 +6,7 @@
 #include <Servo.h>
 
 static uint8_t i2cbuffer[8];
-static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer;
+static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer, nTimer;
 static float accAngle, pitch, gyroAngle;
 
 #define rightEncoder1 2
@@ -47,7 +47,8 @@ typedef struct {
 
 extern cfg_t cfg;
 
-static float iTerm;
+static float integratedError;
+static float i2Term; //placeholder
 static float lastError;
 static float lastRestAngle;
 #endif
