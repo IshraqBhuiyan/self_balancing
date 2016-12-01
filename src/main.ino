@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include "Kalman.h"
 #include "main.h"
+#include "PID_v1.h"
 #include <Servo.h>
 
 
@@ -10,10 +11,16 @@
 Kalman kalman;
 cfg_t cfg;
 int i =0;
+double setpoint, input, output;
+PID anglePID(&input, &output, &setpoint, (double)cfg.P, (double)cfg.I, (double)cfg.D, DIRECT);
 
 void setup(){
   setValues();
   Serial.begin(9600);
+  anglePID.SetTunings((double)cfg.P, (double)cfg.I, (double)cfg.D);
+  setpoint = cfg.targetAngle;
+  anglePID.SetOutputLimits(0, 400);
+  anglePID.SetMode(REVERSE);
   //cfg.targetAngle = 180.0f;
   //Serial.println("Hi2");
   MPU_setup();
@@ -30,15 +37,23 @@ void setup(){
 
 void loop(){
   MPU_update();
+  input = (double)pitch;
   //Serial.println("Kalman Pitch: " + (String)pitch);
   uint32_t timer = micros();
   //drive_motor(2200, 2200);
+  anglePID.Compute();
   if(millis()-testTimer>=1000){
     Serial.println("Kalman Value" + (String)pitch);
+    Serial.println("PID Value:" + (String)output);
     testTimer = millis();
   }
-  //drive_motor(1900,1900);
-  updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
+  if((pitch - cfg.targetAngle) <0){
+    drive_motor(1500-output, 1500-output);
+  }else{
+    drive_motor(1500+output, 1500+output);
+  }
+  //drive_motor(output, output);
+  //updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
   //updateEncoder();
   //Serial.println("Motor Speeds" + (String)(1500+i));
   /*
@@ -81,12 +96,12 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 62.00f;
-  cfg.I = 0.15f;
-  cfg.D = 25.0f;
+  cfg.P = 1.00f;
+  cfg.I = 0.00f;
+  cfg.D = 00.0f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 0.97f;
-  cfg.targetAngle = 271.30f;
+  cfg.targetAngle = 275.00f;
   cfg.turningLimit = 2;
 //P:20I:0.005D:8.0
 }

@@ -18,7 +18,7 @@ void motor_setup(){
 void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
   uint32_t n2Timer = millis();
 
-  if(n2Timer - n3Timer >= 1000){
+  if(false && n2Timer - n3Timer >= 1000){
     Serial.println("Left motor: "+(String)leftMotor);
     Serial.println("right motor: "+(String)rightMotor);
     n3Timer = n2Timer;
