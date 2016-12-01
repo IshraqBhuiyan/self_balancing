@@ -22,6 +22,7 @@ void setup(){
   stopAndReset();
   testTimer = millis();
   nTimer = millis();
+  n3Timer = millis();
   //cfg.backToSpot = 0;
   //Serial.println("Hi1");
 
@@ -32,11 +33,11 @@ void loop(){
   //Serial.println("Kalman Pitch: " + (String)pitch);
   uint32_t timer = micros();
   //drive_motor(2200, 2200);
-  if(millis()-testTimer>=500){
+  if(millis()-testTimer>=1000){
     Serial.println("Kalman Value" + (String)pitch);
     testTimer = millis();
   }
-  //drive_motor(max_pulsewidth,max_pulsewidth);
+  //drive_motor(1900,1900);
   updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
   //updateEncoder();
   //Serial.println("Motor Speeds" + (String)(1500+i));
@@ -80,12 +81,12 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 30.0f;
-  cfg.I = 0.00f;
-  cfg.D = 0.0f;
+  cfg.P = 62.00f;
+  cfg.I = 0.15f;
+  cfg.D = 25.0f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 0.97f;
-  cfg.targetAngle = 272.0f;
+  cfg.targetAngle = 271.30f;
   cfg.turningLimit = 2;
-
+//P:20I:0.005D:8.0
 }
