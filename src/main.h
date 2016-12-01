@@ -6,7 +6,7 @@
 #include <Servo.h>
 
 static uint8_t i2cbuffer[8];
-static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer, nTimer, n3Timer;
+static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer, nTimer, n3Timer, testTimer2;
 static float accAngle, pitch, gyroAngle;
 
 #define rightEncoder1 2
