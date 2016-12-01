@@ -47,8 +47,8 @@ void updatePID(float restAngle, float offset, float turning, float dt){
   lastError = error;
   float PIDValue = pTerm + iTerm + dTerm;
 
-  float PIDLeft = PIDValue + turning;
-  float PIDRight = PIDValue - turning;
+  float PIDLeft = PIDValue; //+ turning;
+  float PIDRight = PIDValue;// - turning;
   uint32_t n2Timer = millis();
   if(n2Timer - nTimer >= 100){
     Serial.println("Left PID: "+(String)PIDLeft);
