@@ -32,17 +32,23 @@ static bool steerStop = true;
 
 #define min_pulsewidth 1100
 #define max_pulsewidth 1900
+#define NEUTRAL 1500
 
 typedef struct {
   float P, I, D; // PID variables
   float targetAngle; // Resting angle of the robot
+  uint32_t SAMPLETIME; // Samplign time for PID loop in microseconds
   uint8_t backToSpot; // Set whenever the robot should stay in the same spot
   uint8_t controlAngleLimit; // Set the maximum tilting angle of the robot
   uint8_t turningLimit; // Set the maximum turning value
-  //float Qangle, Qbias, Rmeasure; // Kalman filter values
   float accYzero, accZzero; // Accelerometer zero values
   float leftMotorScaler, rightMotorScaler;
-  //bool bindSpektrum;
+  float PIDMAX; //Maximum PID value allowable
+  float PIDMIN; //Minimum PID value allowable
+  uint16_t rightMotorForwardOffset;
+  uint16_t rightMotorReverseOffset;
+  uint16_t leftMotorForwardOffset;
+  uint16_t leftMotorReverseOffset;
 } cfg_t;
 
 extern cfg_t cfg;
