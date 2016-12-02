@@ -7,7 +7,7 @@
 
 
 //const int MPU_addr=0x68;  // I2C address of the MPU-6050
-//int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
+
 Kalman kalman;
 cfg_t cfg;
 int i =0;

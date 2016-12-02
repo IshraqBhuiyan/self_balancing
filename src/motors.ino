@@ -38,10 +38,6 @@ void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
     right.writeMicroseconds(rightMotor);
   }
 
-  //left.writeMicroseconds(leftMotor);
-  //right.writeMicroseconds(rightMotor);
-  //delay(500);
-  //Serial.println("Wrote left" + (String)leftMotor + " Wrote right " + (String)rightMotor);
 }
 void updatePID(float restAngle, float offset, float turning, float dt){
   if(!(abs(pitch - restAngle)>30)){
@@ -73,35 +69,6 @@ void updatePID(float restAngle, float offset, float turning, float dt){
   }else{
     drive_motor(min_pulsewidth,min_pulsewidth);
   }
-}
-//old Update PID, kept here for reference
-void updatePID2(float restAngle, float offset, float turning, float dt){
-  if(false/*steerStop*/){
-    int32_t wheelPosition = getWheelsPosition();
-    int32_t positionError = wheelPosition - targetPosition;
-    if(abs(positionError)<2000){
-      restAngle -= (float)positionError/1000.0f;
-    }else{
-      targetPosition = wheelPosition;
-    }
-    restAngle -=(float)wheelVelocity / 120.0f;
-    restAngle = constrain(restAngle, cfg.targetAngle - 10, cfg.targetAngle +10);
-  }
-  float error = restAngle - pitch;
-  float pTerm = cfg.P * error;
-  i2Term += cfg.I * 100.0f * error * dt;
-  i2Term = constrain(i2Term, -100.0f, 100.0f);
-  float dTerm = (cfg.D/100.0f) * (error-lastError) / dt;
-  lastError = error;
-  float PIDValue = pTerm + i2Term + dTerm;
-
-  float PIDLeft = PIDValue + turning;
-  float PIDRight = PIDValue - turning;
-
-  PIDLeft = constrain(map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
-  PIDRight = constrain(map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
-
-  drive_motor(PIDLeft, PIDRight);
 }
 
 void stopAndReset(){
