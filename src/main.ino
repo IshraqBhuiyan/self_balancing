@@ -23,7 +23,7 @@ void setup(){
   anglePID.SetOutputLimits(-400, 400);
   anglePID.SetMode(AUTOMATIC);
   MPU_setup();
-  setup_encoder();
+  //setup_encoder();
   motor_setup();
   stopAndReset();
   testTimer = millis();
@@ -42,21 +42,21 @@ void loop(){
     Serial.println("PID Value:" + (String)output);
     testTimer = millis();
   }
-  if(false &&(pitch - cfg.targetAngle) <0){
+  if(false&&(pitch - cfg.targetAngle) <0){
     drive_motor(1500-output, 1500-output);
   }else if(false){
     drive_motor(1500+output, 1500+output);
   }
-  //drive_motor(1500+output, 1500+output);
+  drive_motor(1500+output, 1500+output);
   //updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
-  drive_motor(1900, 1500);
-  updateEncoder();
-  uint32_t currTime = millis();
-  if(currTime-testTimer2 >= 1000){
-    Serial.println("Left Velocity: " + (String)leftCounter);
-    Serial.println("Right Velocity: " + (String)rightCounter);
-    testTimer2 = currTime;
-  }
+  //drive_motor(1900, 1500);
+  //updateEncoder();
+  //uint32_t currTime = millis();
+  //if(currTime-testTimer2 >= 1000){
+  //  Serial.println("Left Velocity: " + (String)leftCounter);
+  //  Serial.println("Right Velocity: " + (String)rightCounter);
+  //  testTimer2 = currTime;
+  //}
 }
 
 void setValues(){
