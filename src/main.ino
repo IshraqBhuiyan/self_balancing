@@ -65,12 +65,12 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 55.00f;
-  cfg.I = 0.0f;
-  cfg.D = 30.0f;
+  cfg.P = 28.0f;//21.3f;//40.0f;
+  cfg.I = 440.0f;//650.0f;//385.0f;//300
+  cfg.D = 0.92f;//0.7;//1.5f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 0.97f;
-  cfg.targetAngle = 274.50f;
+  cfg.targetAngle = 272.20f;
   cfg.turningLimit = 2;
 //P:20I:0.005D:8.0
 }
