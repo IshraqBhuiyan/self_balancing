@@ -67,6 +67,11 @@ void updatePID(float offset, float turning){
 
       float PIDLeft = PIDValue;
       float PIDRight = PIDValue;
+
+
+      PIDLeft = constrain(PIDLeft, cfg.PIDMIN, cfg.PIDMAX);
+      PIDRight = constrain(PIDRight, cfg.PIDMIN, cfg.PIDMAX);
+
       uint32_t n2Timer = millis();
 
       if(n2Timer - nTimer >= 1000){
@@ -74,9 +79,6 @@ void updatePID(float offset, float turning){
         Serial.println("RightPID: "+(String)PIDRight);
         nTimer = n2Timer;
       }
-
-      PIDLeft = constrain(PIDLeft, cfg.PIDMIN, cfg.PIDMAX);
-      PIDRight = constrain(PIDRight, cfg.PIDMIN, cfg.PIDMAX);
 
       drive_motor(NEUTRAL + (uint16_t)PIDLeft, NEUTRAL + (uint16_t)PIDRight);
       PIDTimer = currTime;
