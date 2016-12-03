@@ -14,6 +14,8 @@ int i =0;
 double setpoint, input, output;
 PID anglePID(&input, &output, &setpoint, (double)cfg.P, (double)cfg.I, (double)cfg.D, DIRECT);
 
+int state =1;
+uint32_t testTimer3, tt4;
 void setup(){
   setValues();
   Serial.begin(9600);
@@ -65,12 +67,12 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 28.0f;//21.3f;//40.0f;
-  cfg.I = 440.0f;//650.0f;//385.0f;//300
-  cfg.D = 0.92f;//0.7;//1.5f;
+  cfg.P = 28.80f;//21.3f;//40.0f;
+  cfg.I = 650.0f;//650.0f;//385.0f;//300
+  cfg.D = 0.98f;//0.7;//1.5f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 0.97f;
-  cfg.targetAngle = 272.20f;
+  cfg.targetAngle = 270.85f;
   cfg.turningLimit = 2;
 //P:20I:0.005D:8.0
 }
