@@ -25,6 +25,8 @@ static int32_t lastRightPosition;
 static int32_t leftVelocity;
 static int32_t rightVelocity;
 
+static float SMoffset;
+
 static bool steerStop = true;
 
 #define leftMotorPin 9

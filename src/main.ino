@@ -12,10 +12,17 @@ Kalman kalman;
 cfg_t cfg;
 int i =0;
 double setpoint, input, output;
+float Pspeed, Ispeed, Dspeed, speedDifference, SMoffset;
+double speedTarget = 0;
 PID anglePID(&input, &output, &setpoint, (double)cfg.P, (double)cfg.I, (double)cfg.D, DIRECT);
+PID speedPID(&speedDifference, &SMoffset, &speedTarget, (double)Pspeed, (double)Ispeed, (double)Dspeed, DIRECT);
 
 int state =1;
 uint32_t testTimer3, tt4;
+float leftMultiplier = 1.0;
+float rightMultiplier = 1.0;
+
+
 void setup(){
   setValues();
   Serial.begin(9600);
@@ -25,6 +32,13 @@ void setup(){
   anglePID.SetOutputLimits(-400, 400);
   anglePID.SetMode(AUTOMATIC);
   MPU_setup();
+  speedDifference = 0.0;
+  SMoffset = 0.0;
+  speedPID.SetTunings(Pspeed,Ispeed,Dspeed);
+  speedPID.SetSampleTime(10);
+  speedPID.SetOutputLimits(-1,1);
+  speedPID.SetMode(AUTOMATIC);
+
   //setup_encoder();
   motor_setup();
   stopAndReset();
@@ -44,12 +58,16 @@ void loop(){
     Serial.println("PID Value:" + (String)output);
     testTimer = millis();
   }
-  if(false&&(pitch - cfg.targetAngle) <0){
+  speedDifference = leftVelocity - rightVelocity;
+  speedPID.Compute();
+  /*if(false&&(pitch - cfg.targetAngle) <0){
     drive_motor(1500-output, 1500-output);
   }else if(false){
     drive_motor(1500+output, 1500+output);
-  }
-  drive_motor(1500+output, 1500+output);
+  }*/
+  leftMultiplier = constrain(leftMultiplier + SMoffset, 0.0,2.0);
+  rightMultiplier = constrain(rightMultiplier - SMoffset, 0.0,2.0);
+  drive_motor(1500+leftMultiplier*output, 1500+leftMultiplier*output);
   //updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
   //drive_motor(1900, 1500);
   //updateEncoder();
@@ -75,4 +93,8 @@ void setValues(){
   cfg.targetAngle = 270.85f;
   cfg.turningLimit = 2;
 //P:20I:0.005D:8.0
+  Pspeed = 5.0;
+  Ispeed = 0.001;
+  Dspeed = 2.0;
+
 }
