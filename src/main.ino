@@ -20,7 +20,7 @@ void setup(){
   setValues();
   Serial.begin(9600);
   anglePID.SetTunings((double)cfg.P, (double)cfg.I, (double)cfg.D);
-  anglePID.SetSampleTime(10);
+  anglePID.SetSampleTime(5);
   setpoint = cfg.targetAngle;
   anglePID.SetOutputLimits(-400, 400);
   anglePID.SetMode(AUTOMATIC);
@@ -44,21 +44,10 @@ void loop(){
     Serial.println("PID Value:" + (String)output);
     testTimer = millis();
   }
-  if(false&&(pitch - cfg.targetAngle) <0){
-    drive_motor(1500-output, 1500-output);
-  }else if(false){
-    drive_motor(1500+output, 1500+output);
-  }
+
   drive_motor(1500+output, 1500+output);
   //updatePID(cfg.targetAngle, 0, 0,(float)(timer-PIDTimer)/1000000.0f);
-  //drive_motor(1900, 1500);
   //updateEncoder();
-  //uint32_t currTime = millis();
-  //if(currTime-testTimer2 >= 1000){
-  //  Serial.println("Left Velocity: " + (String)leftCounter);
-  //  Serial.println("Right Velocity: " + (String)rightCounter);
-  //  testTimer2 = currTime;
-  //}
 }
 
 void setValues(){
@@ -67,12 +56,12 @@ void setValues(){
   cfg.backToSpot = 0;
   //cfg.bindSpektrum = false;
   cfg.controlAngleLimit = 45;
-  cfg.P = 28.80f;//21.3f;//40.0f;
-  cfg.I = 650.0f;//650.0f;//385.0f;//300
-  cfg.D = 0.98f;//0.7;//1.5f;
+  cfg.P = 40.0f;//28.80f;//21.3f;//40.0f;
+  cfg.I = 435.0f;//650.0f;//650.0f;//385.0f;//300
+  cfg.D = 1.5f;//0.98f;//0.7;//1.5f;
   cfg.leftMotorScaler = 1.0f;
   cfg.rightMotorScaler = 0.97f;
-  cfg.targetAngle = 270.85f;
+  cfg.targetAngle = 270.0f;
   cfg.turningLimit = 2;
 //P:20I:0.005D:8.0
 }
