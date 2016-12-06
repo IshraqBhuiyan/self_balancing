@@ -52,7 +52,7 @@ void updatePID(float offset, float turning){
   //If the angle is greater than 45 degrees, the robot is not in a position
   //to be balancing and therefore the motors will be shut off until otherwise
   float restAngle = cfg.targetAngle;
-  if(!(abs(pitch - restAngle)>45)){
+  if(!(abs(pitch - restAngle)>30)){
     uint32_t currTime = micros();
     if(currTime-PIDTimer>=cfg.SAMPLETIME){
       float dt = float((currTime - PIDTimer))/1000000.0f;

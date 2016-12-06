@@ -67,15 +67,15 @@ void loop(){
 }
 
 void setValues(){
-  cfg.SAMPLETIME = 10000; //Sample time set to 2 ms
+  cfg.SAMPLETIME = 8000; //Sample time set to 2 ms
   cfg.accYzero = 0.0f;
   cfg.accZzero = 0.0f;
   cfg.backToSpot = 0;
   cfg.controlAngleLimit = 45;
-  cfg.P = 21.3f;//28.0f;//25.20f;  //28.0f;//21.3f;//40.0f;
-  cfg.I = 440.0f;//122.0f;//135.0f;//20.0f; //440.0f;//650.0f;//385.0f;//300
-  cfg.D = 0.92f;//0.22f;//0.55f;//0.35f; //0.92f;//0.7;//1.5f;
-  cfg.targetAngle = 270.87f;
+  cfg.P = 9.25f;//21.3f;//28.0f;//25.20f;  //28.0f;//21.3f;//40.0f;
+  cfg.I = 77.25f;//440.0f;//122.0f;//135.0f;//20.0f; //440.0f;//650.0f;//385.0f;//300
+  cfg.D = 0.370f;//0.92f;//0.22f;//0.55f;//0.35f; //0.92f;//0.7;//1.5f;
+  cfg.targetAngle = 269.12f;
   cfg.rightMotorForwardOffset = 78;
   cfg.rightMotorReverseOffset = 85;
   cfg.leftMotorForwardOffset = 70;
