@@ -1,7 +1,10 @@
 #include <Servo.h>
 #include "main.h"
+#include "PID_v1.h"
 Servo left;
 Servo right;
+
+PID anglePID(&input, &output, &setpoint, (double)cfg.P, (double)cfg.I, (double)cfg.D, DIRECT);
 
 extern cfg_t cfg;
 
@@ -13,20 +16,15 @@ void motor_setup(){
   right.writeMicroseconds((min_pulsewidth + max_pulsewidth)/2);
   delay(1500);
   Serial.println("Armed");
+  anglePID.SetTunings((double)cfg.P, (double)cfg.I, (double)cfg.D);
+  anglePID.SetSampleTime(5);
+  setpoint = cfg.targetAngle;
+  anglePID.SetOutputLimits(-400, 400);
+  anglePID.SetMode(AUTOMATIC);
+  testTimer2 = millis();
 }
 
 void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
-  uint32_t n2Timer = millis();
-  if(false){ //debugging to find motor speeds
-    left.writeMicroseconds(leftMotor);
-    right.writeMicroseconds(rightMotor);
-    return;
-  }
-  if(false && n2Timer - n3Timer >= 1000){
-    Serial.println("Left motor: "+(String)leftMotor);
-    Serial.println("right motor: "+(String)rightMotor);
-    n3Timer = n2Timer;
-  }
   if(leftMotor<1500){
     left.writeMicroseconds(leftMotor-90);
   }else if(leftMotor>1500){
@@ -44,35 +42,19 @@ void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
 
 }
 
-void updatePID(float restAngle, float offset, float turning, float dt){
-  if(!(abs(pitch - restAngle)>30)){
-    float error = restAngle - pitch;
-    float pTerm = cfg.P * error;
-    integratedError += error*dt;
-    integratedError = constrain(integratedError, -10.0f, 10.0f);
-    float iTerm = cfg.I * integratedError;
-    float dTerm = cfg.D * ((error-lastError) / dt);
-    lastError = error;
-    float PIDValue = pTerm + iTerm + dTerm;
-
-    float PIDLeft = PIDValue; //+ turning;
-    float PIDRight = PIDValue;// - turning;
-    uint32_t n2Timer = millis();
-
-    if(n2Timer - nTimer >= 1000){
-      Serial.println("Left PID: "+(String)PIDLeft);
-      Serial.println("RightPID: "+(String)PIDRight);
-      nTimer = n2Timer;
-    }
-
-    PIDLeft = constrain(map(PIDLeft, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
-    PIDRight = constrain(map(PIDRight, -300, 300, min_pulsewidth, max_pulsewidth), min_pulsewidth, max_pulsewidth);
-
-    drive_motor(PIDLeft, PIDRight);
-  }else if((pitch-restAngle)<0){
-    drive_motor(max_pulsewidth,max_pulsewidth);
+void updatePID(){
+  anglePID.Compute();
+  if(millis()-testTimer2 <=2000){
+    setpoint = cfg.targetAngle;
+  }else if(millis()-testTimer2 <=5000){
+    setpoint = cfg.targetAngle-1.5; //+-1.5 //
   }else{
-    drive_motor(min_pulsewidth,min_pulsewidth);
+    testTimer2 = millis();
+  }
+  if(abs(pitch-cfg.targetAngle)>=30){
+    drive_motor(1500,1500);
+  }else{
+    drive_motor(1500+output, 1500+output);
   }
 }
 

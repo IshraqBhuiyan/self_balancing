@@ -7,6 +7,7 @@
 
 static uint8_t i2cbuffer[8];
 static uint32_t kalmanTimer, imuTimer, encoderTimer, PIDTimer, testTimer, nTimer, n3Timer, testTimer2;
+static uint32_t testTimer3, tt4;
 static float accAngle, pitch, gyroAngle;
 
 #define rightEncoder1 2
@@ -16,6 +17,8 @@ static float accAngle, pitch, gyroAngle;
 
 static volatile int32_t leftCounter = 0;
 static volatile int32_t rightCounter = 0;
+
+double setpoint, input, output;
 
 static int32_t lastWheelPosition;
 static int32_t wheelVelocity;
