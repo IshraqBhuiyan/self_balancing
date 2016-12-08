@@ -26,3 +26,19 @@ bool checkMinMax(int16_t *array, uint8_t length, int16_t maxDifference) { // Use
   }
   return max - min < maxDifference;
 }
+
+void updateAngle(){
+  if(millis()-avoidTimer >=500){
+    //Serial.println("Distance: " + (String)distance);
+    if((distance <= cfg.avoidDistance) || (distance2 <= cfg.avoidDistance)){
+      if(distance<=distance2){
+        setpoint = cfg.targetAngle - 1.5;
+      }else{
+        setpoint = cfg.targetAngle + 1.5;
+      }
+    }else{
+      setpoint = cfg.targetAngle;
+    }
+    avoidTimer = millis();
+  }
+}

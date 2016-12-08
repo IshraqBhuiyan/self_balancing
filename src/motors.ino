@@ -44,14 +44,7 @@ void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
 
 void updatePID(){
   anglePID.Compute();
-  if(millis()-testTimer2 <=2000){
-    setpoint = cfg.targetAngle;
-  }else if(millis()-testTimer2 <=5000){
-    setpoint = cfg.targetAngle-1.5; //+-1.5 //
-  }else{
-    testTimer2 = millis();
-  }
-  if(abs(pitch-cfg.targetAngle)>=30){
+  if(abs(pitch-cfg.targetAngle)>=cfg.controlAngleLimit){
     drive_motor(1500,1500);
   }else{
     drive_motor(1500+output, 1500+output);

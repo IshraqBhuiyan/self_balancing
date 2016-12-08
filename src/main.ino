@@ -14,7 +14,7 @@ int i =0;
 
 int output2;
 
-int state =1;
+//int state =1;
 void setup(){
   setValues();
   Serial.begin(9600);
@@ -22,20 +22,26 @@ void setup(){
   //setup_encoder();
   motor_setup();
   stopAndReset();
+  ultraSoundSetup();
   testTimer = millis();
   nTimer = millis();
   n3Timer = millis();
+  avoidTimer = millis();
   output2 = 1500;
 }
 
 void loop(){
   MPU_update();
+  ultraSound();
+  updateAngle();
   input = (double)pitch;
   uint32_t timer = micros();
   updatePID();
   if(millis()-testTimer>=1000){
     Serial.println("Kalman Value" + (String)pitch);
     Serial.println("PID Value:" + (String)output);
+    Serial.println("Distance: "+(String)distance);
+    Serial.println("Distance 2: " + (String)distance2);
     testTimer = millis();
   }
 
@@ -43,14 +49,11 @@ void loop(){
 }
 
 void setValues(){
-  cfg.accYzero = 0.0f;
-  cfg.accZzero = 0.0f;
-  cfg.backToSpot = 0;
-  cfg.controlAngleLimit = 45;
+  cfg.controlAngleLimit = 30;
   cfg.P = 10.5f;//13.24;//40.0f;//28.80f;//21.3f;//40.0f;
   cfg.I = 170.0f;//200.0f;//139.25;//435.0f;//650.0f;//650.0f;//385.0f;//300
   cfg.D = 0.35f;//0.414f;//1.5f;//0.98f;//0.7;//1.5f;
   cfg.targetAngle = 269.60f;
-  cfg.turningLimit = 2;
+  cfg.avoidDistance = 10;
 //P:20I:0.005D:8.0
 }

@@ -1,4 +1,65 @@
 
+void ultraSoundSetup(){
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin2, OUTPUT);
+  pinMode(echoPin2, INPUT);
+  attachInterrupt(digitalPinToInterrupt(echoPin), ultraTime, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(echoPin2), ultraTime2, CHANGE);
+}
+
+void ultraTime(){
+  if(state ==1){
+    if(digitalRead(echoPin)==HIGH){
+      startTimer = micros();
+    }else if(digitalRead(echoPin)==LOW){
+      endTimer = micros();
+      distance = microsecondsToCentimeters(endTimer-startTimer);
+      state=0;
+    }
+  }
+}
+
+void ultraTime2(){
+  if(state2 == 1){
+    if(digitalRead(echoPin2)==HIGH){
+      startTimer2 = micros();
+    }else if(digitalRead(echoPin2)==LOW){
+      endTimer2 = micros();
+      distance2 = microsecondsToCentimeters(endTimer2-startTimer2);
+      state2=0;
+    }
+  }
+}
+
+void ultraSound(){
+  if(state ==0){
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, LOW);
+    //timer=millis();
+    state = 1;
+  }
+  if(state2 ==0){
+    digitalWrite(trigPin2, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin2, HIGH);
+    delayMicroseconds(2);
+    digitalWrite(trigPin2, LOW);
+    state2 = 1;
+  }
+}
+
+uint32_t microsecondsToCentimeters(uint32_t microseconds)
+{
+  // The speed of sound is 340 m/s or 29 microseconds per centimeter.
+  // The ping travels out and back, so to find the distance of the
+  // object we take half of the distance travelled.
+  return microseconds / 29 / 2;
+}
+
 void MPU_setup(){
   Wire.begin();
   Wire.setClock(25000UL);
