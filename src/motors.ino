@@ -17,20 +17,25 @@ void motor_setup(){
 
 void drive_motor(uint16_t leftMotor, uint16_t rightMotor){
   uint32_t n2Timer = millis();
+  if(false){ //debugging to find motor speeds
+    left.writeMicroseconds(leftMotor);
+    right.writeMicroseconds(rightMotor);
+    return;
+  }
   if(false && n2Timer - n3Timer >= 1000){
     Serial.println("Left motor: "+(String)leftMotor);
     Serial.println("right motor: "+(String)rightMotor);
     n3Timer = n2Timer;
   }
   if(leftMotor<1500){
-    left.writeMicroseconds(leftMotor-75);
+    left.writeMicroseconds(leftMotor-90);
   }else if(leftMotor>1500){
-    left.writeMicroseconds(leftMotor+70);
+    left.writeMicroseconds(leftMotor+80);
   }else{
     left.writeMicroseconds(leftMotor);
   }
   if(rightMotor<1500){
-    right.writeMicroseconds(rightMotor-85);
+    right.writeMicroseconds(rightMotor-90);
   }else if (rightMotor>1500){
     right.writeMicroseconds(rightMotor+70);
   }else{
